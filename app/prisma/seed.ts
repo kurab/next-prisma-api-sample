@@ -8,11 +8,25 @@ const main = async () => {
     imageUrl: '/takt.png',
   };
 
-  await prisma.user.upsert({
+  const user = await prisma.user.upsert({
     where: { userName: 'admin' },
     update: {},
     create: userBody,
   });
+
+  let postBody: Prisma.PostCreateInput;
+  for (let i = 0; i < 20; i++) {
+    postBody = {
+      title: `title-${i}`,
+      content: `content-${i}`,
+      author: { connect: { id: user.id } },
+    };
+    await prisma.post.upsert({
+      where: { id: i },
+      update: {},
+      create: postBody,
+    });
+  }
 };
 
 main()
