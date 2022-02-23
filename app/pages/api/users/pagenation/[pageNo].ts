@@ -17,6 +17,7 @@ const getHandler = async (
   let statusCode = 200;
   const resUser = await prisma.user
     .findMany({
+      orderBy: { id: 'asc' },
       skip: Number(pageNo * 10),
       take: 10,
       include: {
